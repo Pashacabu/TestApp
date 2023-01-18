@@ -2,6 +2,7 @@ package com.pashacabu.testapp.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pashacabu.testapp.domain.network.KinopoiskAuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,10 +26,17 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun provideAuthInterceptor(): KinopoiskAuthInterceptor =
+        KinopoiskAuthInterceptor()
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        kinopoiskAuthInterceptor: KinopoiskAuthInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(kinopoiskAuthInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -47,7 +55,7 @@ class NetworkModule {
     ): Retrofit.Builder =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("https://api.kinopoisk.dev")
+            .baseUrl("https://api.kinopoisk.dev/")
 
     @Provides
     @Singleton
