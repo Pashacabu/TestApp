@@ -23,22 +23,22 @@ data class MovieResponse(
 data class Rating(
 
 	@field:SerializedName("imdb")
-	val imdb: Int? = null,
+	val imdb: Float? = null,
 
 	@field:SerializedName("kp")
-	val kp: Int? = null,
+	val kp: Float? = null,
 
 	@field:SerializedName("await")
-	val await: Int? = null,
+	val await: Float? = null,
 
 	@field:SerializedName("russianFilmCritics")
-	val russianFilmCritics: Int? = null,
+	val russianFilmCritics: Float? = null,
 
 	@field:SerializedName("_id")
 	val id: String? = null,
 
 	@field:SerializedName("filmCritics")
-	val filmCritics: Int? = null
+	val filmCritics: Float? = null
 )
 
 data class MovieItem(

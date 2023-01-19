@@ -1,6 +1,6 @@
 package com.pashacabu.testapp.data.model
 
 data class RatingModel(
-    val imdb: Int? = null,
-    val kp: Int? = null
+    val imdb: Float? = null,
+    val kp: Float? = null
 )
