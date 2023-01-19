@@ -2,6 +2,11 @@ package com.pashacabu.testapp.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.pashacabu.testapp.domain.network.ApiErrorHandler
+import com.pashacabu.testapp.domain.network.ApiErrorHandlerImpl
+import com.pashacabu.testapp.domain.network.KinopoiskAuthInterceptor
+import com.pashacabu.testapp.domain.network.QueryInterceptor
+import com.pashacabu.testapp.domain.network.QueryInterceptorImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,10 +30,24 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun provideAuthInterceptor(): KinopoiskAuthInterceptor =
+        KinopoiskAuthInterceptor()
+
+    @Provides
+    @Singleton
+    fun provideQueryInterceptor(): QueryInterceptor =
+        QueryInterceptorImpl()
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        kinopoiskAuthInterceptor: KinopoiskAuthInterceptor,
+        queryInterceptor: QueryInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(kinopoiskAuthInterceptor)
+            .addInterceptor(queryInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()
 
@@ -47,7 +66,7 @@ class NetworkModule {
     ): Retrofit.Builder =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("https://api.kinopoisk.dev")
+            .baseUrl("https://api.kinopoisk.dev/")
 
     @Provides
     @Singleton
@@ -56,5 +75,9 @@ class NetworkModule {
         retrofitBuilder: Retrofit.Builder
     ): Retrofit =
         retrofitBuilder.client(okHttpClient).build()
+
+    @Provides
+    @Singleton
+    fun provideApiErrorHandler(): ApiErrorHandler = ApiErrorHandlerImpl()
 
 }
