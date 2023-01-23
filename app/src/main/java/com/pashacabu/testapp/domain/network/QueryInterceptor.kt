@@ -40,11 +40,11 @@ class QueryInterceptorImpl(): QueryInterceptor {
             is ApiQuery.Limit -> builder.addQueryParameter(LIMIT, param.perPage.toString())
             is ApiQuery.Page -> builder.addQueryParameter(PAGE, param.number.toString())
             is ApiQuery.Paired.Search -> {
-                builder.addQueryParameter(FIELD, param.field)
+                builder.addQueryParameter(FIELD, param.field.value)
                 builder.addQueryParameter(SEARCH, param.condition.toString())
             }
             is ApiQuery.Paired.Sort -> {
-                builder.addQueryParameter(SORT_FIELD, param.field)
+                builder.addQueryParameter(SORT_FIELD, param.field.value)
                 builder.addQueryParameter(SORT_TYPE, param.order.order.toString())
             }
         }
